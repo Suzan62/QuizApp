@@ -1,0 +1,11 @@
+C:\Users\Dell\QuizApp\QuizApp.Core\bin\Debug\net9.0\QuizApp.Core.deps.json
+C:\Users\Dell\QuizApp\QuizApp.Core\bin\Debug\net9.0\QuizApp.Core.dll
+C:\Users\Dell\QuizApp\QuizApp.Core\bin\Debug\net9.0\QuizApp.Core.pdb
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\QuizApp.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\QuizApp.Core.AssemblyInfoInputs.cache
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\QuizApp.Core.AssemblyInfo.cs
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\QuizApp.Core.csproj.CoreCompileInputs.cache
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\QuizApp.Core.dll
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\refint\QuizApp.Core.dll
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\QuizApp.Core.pdb
+C:\Users\Dell\QuizApp\QuizApp.Core\obj\Debug\net9.0\ref\QuizApp.Core.dll

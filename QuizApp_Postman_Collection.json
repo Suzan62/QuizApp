@@ -1,0 +1,792 @@
+{
+	"info": {
+		"_postman_id": "12345678-1234-5678-9012-123456789abc",
+		"name": "AI-Powered Quiz Application",
+		"description": "Comprehensive API collection for the AI-powered Quiz Application with authentication, quiz management, and analytics endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set(\"jwt_token\", response.token);",
+									"    pm.environment.set(\"user_id\", response.userId);",
+									"    console.log(\"JWT Token saved:\", response.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"test123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login endpoint that accepts any username/password and returns JWT token"
+					},
+					"response": [
+						{
+							"name": "Successful Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"test123\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": null,
+							"cookie": [],
+							"body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"username\": \"testuser\",\n  \"userId\": 1,\n  \"expiresAt\": \"2024-08-25T12:47:14Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "Verify current authentication status and get user info"
+					}
+				}
+			],
+			"description": "Authentication endpoints for login and token verification"
+		},
+		{
+			"name": "Quiz Management",
+			"item": [
+				{
+					"name": "Generate Quiz",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set(\"quiz_id\", response.id);",
+									"    pm.environment.set(\"question_id\", response.questions[0].id);",
+									"    pm.environment.set(\"answer_id\", response.questions[0].answers[0].id);",
+									"    console.log(\"Quiz ID saved:\", response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"subject\": \"Mathematics\",\n  \"gradeLevel\": \"Grade 5\",\n  \"numberOfQuestions\": 3,\n  \"specificTopics\": \"Addition and Subtraction\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/quiz/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"generate"
+							]
+						},
+						"description": "Generate a new AI-powered quiz based on subject and grade level"
+					}
+				},
+				{
+					"name": "Submit Quiz",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set(\"submission_id\", response.submissionId);",
+									"    console.log(\"Submission ID saved:\", response.submissionId);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quizId\": {{quiz_id}},\n  \"answers\": [\n    {\n      \"questionId\": 1,\n      \"selectedAnswerId\": 1\n    },\n    {\n      \"questionId\": 2,\n      \"selectedAnswerId\": 5\n    },\n    {\n      \"questionId\": 3,\n      \"selectedAnswerId\": 9\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/quiz/submit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"submit"
+							]
+						},
+						"description": "Submit quiz answers for evaluation and get scored results"
+					}
+				},
+				{
+					"name": "Get Hint",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"questionId\": {{question_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/quiz/hint",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"hint"
+							]
+						},
+						"description": "Get AI-generated hint for a specific question"
+					}
+				},
+				{
+					"name": "Retry Quiz",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quizId\": {{quiz_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/quiz/retry",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"retry"
+							]
+						},
+						"description": "Retry a quiz with adaptive difficulty based on past performance"
+					}
+				},
+				{
+					"name": "Get Quiz Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/quiz/{{quiz_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"{{quiz_id}}"
+							]
+						},
+						"description": "Get details of a specific quiz by ID"
+					}
+				}
+			],
+			"description": "Core quiz management endpoints for generation, submission, and interaction"
+		},
+		{
+			"name": "Analytics & History",
+			"item": [
+				{
+					"name": "Get Quiz History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/quiz/history?pageNumber=1&pageSize=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"history"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "grade",
+									"value": "Grade 5",
+									"disabled": true
+								},
+								{
+									"key": "subject",
+									"value": "Mathematics",
+									"disabled": true
+								},
+								{
+									"key": "minMarks",
+									"value": "70",
+									"disabled": true
+								},
+								{
+									"key": "maxMarks",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "fromDate",
+									"value": "2024-08-01",
+									"disabled": true
+								},
+								{
+									"key": "toDate",
+									"value": "2024-08-31",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get paginated quiz history with optional filtering by grade, subject, marks, and dates"
+					}
+				},
+				{
+					"name": "Get Quiz History with Filters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/quiz/history?grade=Grade 5&subject=Mathematics&minMarks=70&fromDate=2024-08-01&toDate=2024-08-31&pageNumber=1&pageSize=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"history"
+							],
+							"query": [
+								{
+									"key": "grade",
+									"value": "Grade 5"
+								},
+								{
+									"key": "subject",
+									"value": "Mathematics"
+								},
+								{
+									"key": "minMarks",
+									"value": "70"
+								},
+								{
+									"key": "fromDate",
+									"value": "2024-08-01"
+								},
+								{
+									"key": "toDate",
+									"value": "2024-08-31"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Example of filtered quiz history request with all available filters"
+					}
+				},
+				{
+					"name": "Get Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/quiz/leaderboard?top=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"leaderboard"
+							],
+							"query": [
+								{
+									"key": "top",
+									"value": "10"
+								},
+								{
+									"key": "grade",
+									"value": "Grade 5",
+									"disabled": true
+								},
+								{
+									"key": "subject",
+									"value": "Mathematics",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get leaderboard showing top performers, optionally filtered by grade and subject"
+					}
+				},
+				{
+					"name": "Get Filtered Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/quiz/leaderboard?grade=Grade 5&subject=Mathematics&top=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								"leaderboard"
+							],
+							"query": [
+								{
+									"key": "grade",
+									"value": "Grade 5"
+								},
+								{
+									"key": "subject",
+									"value": "Mathematics"
+								},
+								{
+									"key": "top",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Get filtered leaderboard for specific grade and subject"
+					}
+				}
+			],
+			"description": "Analytics endpoints for quiz history and leaderboard functionality"
+		},
+		{
+			"name": "Sample Workflows",
+			"item": [
+				{
+					"name": "Complete Quiz Flow",
+					"item": [
+						{
+							"name": "1. Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Login successful\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    pm.environment.set(\"jwt_token\", response.token);",
+											"    pm.environment.set(\"user_id\", response.userId);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"student1\",\n  \"password\": \"password123\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							}
+						},
+						{
+							"name": "2. Generate Quiz",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Quiz generated successfully\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    pm.environment.set(\"quiz_id\", response.id);",
+											"    pm.environment.set(\"question_ids\", JSON.stringify(response.questions.map(q => q.id)));",
+											"    pm.environment.set(\"answer_ids\", JSON.stringify(response.questions.map(q => q.answers[0].id)));",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwt_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"subject\": \"Science\",\n  \"gradeLevel\": \"Grade 7\",\n  \"numberOfQuestions\": 5,\n  \"specificTopics\": \"Physics and Chemistry basics\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/quiz/generate",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										"generate"
+									]
+								}
+							}
+						},
+						{
+							"name": "3. Get Hint for First Question",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Hint received\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    const response = pm.response.json();",
+											"    pm.expect(response.hint).to.not.be.empty;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwt_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"questionId\": 1\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/quiz/hint",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										"hint"
+									]
+								}
+							}
+						},
+						{
+							"name": "4. Submit Quiz",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Quiz submitted successfully\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    pm.environment.set(\"submission_id\", response.submissionId);",
+											"    console.log(\"Score:\", response.score + \"/\" + response.totalPoints);",
+											"    console.log(\"Percentage:\", response.percentage + \"%\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwt_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"quizId\": {{quiz_id}},\n  \"answers\": [\n    {\n      \"questionId\": 1,\n      \"selectedAnswerId\": 1\n    },\n    {\n      \"questionId\": 2,\n      \"selectedAnswerId\": 5\n    },\n    {\n      \"questionId\": 3,\n      \"selectedAnswerId\": 9\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/quiz/submit",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										"submit"
+									]
+								}
+							}
+						},
+						{
+							"name": "5. Check Quiz History",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"History retrieved\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    const response = pm.response.json();",
+											"    pm.expect(response.items).to.be.an('array');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwt_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/quiz/history?pageNumber=1&pageSize=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										"history"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "5"
+										}
+									]
+								}
+							}
+						}
+					],
+					"description": "Complete workflow demonstrating a typical user journey through the quiz application"
+				}
+			],
+			"description": "Pre-configured workflows for common usage scenarios"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5133",
+			"type": "string"
+		}
+	]
+}
