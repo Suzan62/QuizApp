@@ -1,0 +1,19 @@
+# Ignore build folders
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.vs/
+
+# Ignore secrets
+appsettings.json
+appsettings.Development.json
+
+# Ignore logs
+*.log
+
+# Ignore node modules (if you have React/JS frontend)
+node_modules/
+dist/
